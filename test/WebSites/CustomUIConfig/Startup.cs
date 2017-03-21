@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 
-namespace CustomIndexHtml
+namespace CustomUIConfig
 {
     public class Startup
     {
@@ -13,14 +13,12 @@ namespace CustomIndexHtml
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "API V1", Version = "v1" });
+                c.SwaggerDoc("v1", new Info { Version = "v1", Title = "Swashbuckle Sample API" });
             });
         }
 
         public void Configure(IApplicationBuilder app)
         {
-            // Allow wwwroot/swagger/index.html to be served at /swagger
-            app.UseDefaultFiles();
             app.UseStaticFiles();
 
             app.UseMvc();
@@ -29,6 +27,12 @@ namespace CustomIndexHtml
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "V1 Docs");
+                c.EnabledValidator();
+                c.BooleanValues(new object[] { 0, 1 });
+                c.DocExpansion("full");
+                c.SupportedSubmitMethods(new[] { "get", "post", "put", "patch" });
+                c.InjectOnCompleteJavaScript("/ext/custom-script.js");
+                c.InjectStylesheet("/ext/custom-stylesheet.css");
             });
         }
     }

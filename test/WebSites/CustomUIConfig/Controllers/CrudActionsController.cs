@@ -1,14 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MultipleVersions.V1
+namespace CustomUIConfig.Controllers
 {
-    [ApiVersion("1")]
-    [ApiVersion("2")]
-    [Route("v{version:apiVersion}/products")]
+    [Route("/products")]
     [Produces("application/json")]
-    public class ProductsController
+    public class CrudActionsController
     {
+        [HttpPost]
+        public int Create([FromBody, Required]Product product)
+        {
+            return 1;
+        }
+
         [HttpGet]
         public IEnumerable<Product> GetAll()
         {
@@ -24,6 +29,21 @@ namespace MultipleVersions.V1
         {
             return new Product { Id = id, Description = "A product" };
         }
+
+        [HttpPut("{id}")]
+        public void Update(int id, [FromBody, Required]Product product)
+        {
+        }
+
+        [HttpPatch("{id}")]
+        public void PartialUpdate(int id, [FromBody, Required]IDictionary<string, object> updates)
+        {
+        }
+
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+        }
     }
 
     public class Product
@@ -31,5 +51,7 @@ namespace MultipleVersions.V1
         public int Id { get; set; }
 
         public string Description { get; set; }
+
+        public bool InStock { get; set; }
     }
 }
